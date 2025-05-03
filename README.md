@@ -1,15 +1,15 @@
 # Vision-Based Autonomous Robot
 
-This is a fully autonomous robot designed and built by me (Muhammed Jbareen, age 18) from scratch. It uses a single camera for object detection, alignment, and distance estimation, and performs robotic tasks like grabbing and pouring without using depth sensors.
+This project is a fully autonomous robot designed to locate a white cup containing water, pick it up, search for a red cup, pour water into it, and put the white cup back. It uses computer vision, real-time decision-making, shared memory communication, and precise motion control without any external sensor.
 
-## 🔧 Core Features
+## 🚀 Features
 
-- YOLO-based object detection (cup recognition)
-- Visual servoing: estimates distance from object size
-- Real-time movement control via calibrated delay
-- Robotic arm integration (xArm SDK)
-- Shared memory IPC between vision and motion modules
-- Full FSM (state machine) architecture
+- Real-time YOLOv8 object detection
+- Shared memory communication protocol
+- Monocular depth estimation for movement control
+- Visual servoing to align with objects
+- Robotic arm integration with xArm
+- Adaptive motor speed control based on cup distance
 
 ## 📹 Demo
 
@@ -18,11 +18,28 @@ This is a fully autonomous robot designed and built by me (Muhammed Jbareen, age
 
 ## 🧠 System Overview
 
-![Architecture Diagram](docs/architecture.png)
+The robot utilizes a Raspberry Pi 5 with a V3 camera module to run a YOLOv8 model in real-time. It detects cups, determines their colors, calculates relative distances, and communicates via shared memory with a motor control script that handles motion and manipulation.
 
 1. `camera_controller.py`: detects cup, sends data to shared memory
 2. `robot_controller.py`: aligns and moves based on visual input
 3. `arm_controller.py`: executes grasp and pour actions
+
+### ⚙️ Key Modules
+
+- **Camera Processor**: Captures images, runs object detection, calculates color and size, then sends the data via shared memory.
+- **Robot Controller**: Receives detection data, rotates, approaches, and commands the robotic arm to perform physical actions.
+- **Arm Controller**: Handles servo movement and coordination for grabbing and pouring.
+- **Shared Memory Protocol**: Efficient binary protocol for inter-process communication.
+
+## 🧱 Architecture Diagram
+
+![System Architecture](A_system_overview_diagram_illustrates_an_autonomou.png)
+
+## 🛠️ Technologies Used
+
+- **Languages**: Python
+- **Libraries**: OpenCV, ultralytics, smbus, multiprocessing, TensorFlow (backend)
+- **Hardware**: Raspberry Pi 5, V3 Camera Module, xArm1s, 4-channel encoder motor driver
 
 ## 📐 Magic Number Calculation
 
@@ -35,13 +52,19 @@ See `utils/magic_number_calc.pdf` for the geometry and timing math behind the de
 - `docs/`: architecture, behavior logic, diagrams
 - `utils/`: timing model, memory protocol docs
 
-## 🚀 How to Run
+## 🧪 Usage
 
-1. Set up shared memory IPC
-2. Launch `camera_controller.py` in one terminal
-3. Run `robot_controller.py` in another
-4. Robot will search, align, approach, grab, pour, and return autonomously
+1. Clone the repository
+2. Set up the `config.ini` file with correct camera resolution, shared memory name, and voltage.
+3. Run the camera detection script:
+   ```bash
+   python camera_controller.py
+   ```
+4. Run the robot controller:
+   ```bash
+   python robot_controller.py
+   ```
 
 ## 📜 License
 
-MIT License
+This project is released under the MIT License.
